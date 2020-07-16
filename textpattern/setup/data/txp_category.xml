@@ -30,11 +30,11 @@
             <description></description>
         </item>
         <item>
-            <name>simpsons</name>
+            <name>sky</name>
             <type>image</type>
             <parent>root</parent>
-            <title>Simpsons</title>
-            <description>A bunch of characters from The Simpsons animated TV show.</description>
+            <title>Skyscapes</title>
+            <description>A bunch of pictures of sky.</description>
         </item>
     </category>
 </resources>
