@@ -1,0 +1,5 @@
+<h2>5 images by cat</h2>
+<txp:images category="sky" limit="5" />
+
+<h2>5 offset images by cat, sorted by name</h2>
+<txp:images category="sky" limit="5" offset="2" sort="name" />

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="<txp:lang />" dir="<txp:text item="lang_dir" />">
+
+<head>
+    <meta charset="utf-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title><txp:page_title /></title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i&amp;subset=latin-ext">
+
+    <txp:css format="link" media="" />
+    <meta name="generator" content="Textpattern CMS">
+
+    <meta name="robots" content="none">
+
+    <txp:feed_link flavor="atom" format="link" label="Atom" />
+    <txp:feed_link flavor="rss" format="link" label="RSS" />
+</head>
+<body class="testing-page" itemscope itemtype="https://schema.org/CollectionPage">
+    <txp:variable name="to-test"><txp:page_url type="name" /></txp:variable>
+    <txp:php>
+global $variable;
+
+if (empty($variable['to-test'])) {
+    $toTest = safe_column('name', 'txp_form', "type='Section'");
+} else {
+    $toTest = do_list($variable['to-test']);
+}
+
+foreach ($toTest as $formname) {
+    $form = fetch_form($formname);
+    echo parse($form);
+}
+    </txp:php>
+</body>
+</html>
