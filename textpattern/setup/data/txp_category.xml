@@ -29,5 +29,12 @@
             <title>Textpattern</title>
             <description></description>
         </item>
+        <item>
+            <name>simpsons</name>
+            <type>image</type>
+            <parent>root</parent>
+            <title>Simpsons</title>
+            <description>A bunch of characters from The Simpsons animated TV show.</description>
+        </item>
     </category>
 </resources>
