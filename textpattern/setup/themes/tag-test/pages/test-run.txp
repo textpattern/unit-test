@@ -54,9 +54,9 @@ foreach ($toTest as $formname) {
             $testCount++;
             $grpCount[$formname]['test']++;
 
-            if ($input && $expect) {
+            if ($input) {
                 $result = parse($input);
-                $expected = trim(parse($expect));
+                $expected = ($expect) ? trim(parse($expect)) : '';
 
                 if (strpos($variable['unit_show'], 'input') !== false) {
                     echo 'Input<br /><pre class="input">' . htmlspecialchars($input) . '</pre>';
