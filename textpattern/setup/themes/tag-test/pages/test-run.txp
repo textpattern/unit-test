@@ -17,19 +17,20 @@
     <txp:feed_link flavor="rss" format="link" label="RSS" />
 </head>
 <body class="testing-page" itemscope itemtype="https://schema.org/CollectionPage">
-    <txp:variable name="to-test"><txp:page_url type="name" /></txp:variable>
-    <txp:php>
+<txp:variable name="unit_test"><txp:page_url type="name" /></txp:variable>
+<txp:variable name="unit_show"><txp:page_url type="show" /></txp:variable>
+<txp:php>
 global $variable;
 include_once txpath.'/vendors/mustangostang/Spyc/Spyc.php';
 include_once txpath.'/vendors/iamkate/diff/diff.php';
 
-if (empty($variable['to-test'])) {
+if (empty($variable['unit_test'])) {
     $toTest = safe_column('name', 'txp_form', "type='Section'");
 } else {
-    $toTest = do_list($variable['to-test']);
+    $toTest = do_list($variable['unit_test']);
 }
 
-$testCount = $passCount = $failCount = 0;
+$testCount = $passCount = $warnCount = $failCount = 0;
 
 foreach ($toTest as $formname) {
     $form = fetch_form($formname);
@@ -37,20 +38,41 @@ foreach ($toTest as $formname) {
         $tests = Spyc::YAMLLoadString($form);
 
         foreach ($tests as $name => $suite) {
+            if (!isset($grpCount[$formname])) {
+                $grpCount[$formname] = array(
+                    'test' => 0,
+                    'pass' => 0,
+                    'warn' => 0,
+                    'fail' => 0,
+                );
+            }
+
             $input = !empty($suite['input']) ? $suite['input'] : '';
             $expect = !empty($suite['expect']) ? $suite['expect'] : '';
-//            echo parse($input);
+
+            echo "<h4>$name</h4>";
+            $testCount++;
+            $grpCount[$formname]['test']++;
 
             if ($input && $expect) {
-                if (!isset($grpCount[$formname])) {
-                    $grpCount[$formname] = array('test' => 0, 'pass' => 0, 'fail' => 0);
-                }
-
-                echo "<h4>$name</h4>";
-                $testCount++;
-                $grpCount[$formname]['test']++;
                 $result = parse($input);
                 $expected = trim(parse($expect));
+
+                if (strpos($variable['unit_show'], 'input') !== false) {
+                    echo 'Input<br /><pre class="input">' . htmlspecialchars($input) . '</pre>';
+                }
+
+                if (strpos($variable['unit_show'], 'expect') !== false) {
+                    echo 'Expect<br /><pre class="expect">' . htmlspecialchars($expected) . '</pre>';
+                }
+
+                if (strpos($variable['unit_show'], 'output') !== false) {
+                    echo 'Output<br /><pre class="output">' . htmlspecialchars($result) . '</pre>';
+                }
+
+                if (strpos($variable['unit_show'], 'parsed') !== false) {
+                    echo 'Parsed<br /><div class="parsed">' . $result . '</div>';
+                }
 
                 if ($result === $expected) {
                     $passCount++;
@@ -63,6 +85,10 @@ foreach ($toTest as $formname) {
                     $diff = Diff::compare($expected, $result, true);
                     echo Diff::toTable($diff, '', '');
                 }
+            } else {
+                $grpCount[$formname]['warn']++;
+                $warnCount++;
+                echo '<p class="warning">Test invalid</p>';
             }
         }
     } else {
@@ -74,6 +100,7 @@ foreach ($toTest as $formname) {
         echo graf(
             '<span>Total: '.$grpCount[$formname]['test'].'</span>'.br.
             (($grpCount[$formname]['pass'] > 0) ? '<span class="success">Passed: '.$grpCount[$formname]['pass'].'</span>'.br : '').
+            (($grpCount[$formname]['warn'] > 0) ? '<span class="warning">Warning: '.$grpCount[$formname]['warn'].'</span>'.br : '').
             (($grpCount[$formname]['fail'] > 0) ? '<span class="error">Failed: '.$grpCount[$formname]['fail'].'</span>' : '')
             , array('id' => 'unit-test-results')
         );
@@ -85,9 +112,10 @@ echo hed('Overall results', 4);
 echo graf(
     '<span>Total: '.$testCount.'</span>'.br.
     (($passCount > 0) ? '<span class="success">Passed: '.$passCount.'</span>'.br : '').
+    (($warnCount > 0) ? '<span class="warning">Warning: '.$warnCount.'</span>'.br : '').
     (($failCount > 0) ? '<span class="error">Failed: '.$failCount.'</span>' : '')
     , array('id' => 'unit-test-results')
 );
-    </txp:php>
+</txp:php>
 </body>
 </html>

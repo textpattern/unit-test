@@ -1,4 +1,3 @@
----
 5 images by category:
   input: |
     <txp:images category="sky" limit="5" />
