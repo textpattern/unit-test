@@ -1,0 +1,13 @@
+Site name:
+  input: |
+    <txp:site_name />
+  expect: |
+    Unit Test Suite
+
+Site slogan wrapped in paras with class:
+  input: |
+    <txp:site_slogan wraptag="p" class="slogan" />
+  expect: |
+    <p class="slogan">Textpattern tag testing</p>
+
+

@@ -1,0 +1,10 @@
+/admin-themes/
+!/admin-themes/classic/
+!/admin-themes/hive/
+!/admin-themes/hiveneutral/
+/config.php
+/plugin-cache
+/plugins/*
+/setup/.default.json
+/tmp/*
+/tmp/!.gitignore

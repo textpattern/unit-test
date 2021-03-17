@@ -827,6 +827,28 @@ tfoot td {
     vertical-align: middle;
   }
 
+  .diff td {
+    vertical-align : top;
+    white-space    : pre;
+    white-space    : pre-wrap;
+    font-family    : monospace;
+  }
+
+  .diff .diffUnmodified {
+    display: none;
+  }
+
+  .diff .diffDeleted, .error {
+    color:red;
+  }
+
+  .diff .diffInserted, .success {
+    color: green;
+  }
+
+  .diff .diffBlank {
+  }
+
   /* Lists
      ========================================================================== */
   /**

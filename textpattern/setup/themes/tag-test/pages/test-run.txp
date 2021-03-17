@@ -20,6 +20,8 @@
     <txp:variable name="to-test"><txp:page_url type="name" /></txp:variable>
     <txp:php>
 global $variable;
+include_once txpath.'/vendors/mustangostang/Spyc/Spyc.php';
+include_once txpath.'/vendors/iamkate/diff/diff.php';
 
 if (empty($variable['to-test'])) {
     $toTest = safe_column('name', 'txp_form', "type='Section'");
@@ -27,10 +29,65 @@ if (empty($variable['to-test'])) {
     $toTest = do_list($variable['to-test']);
 }
 
+$testCount = $passCount = $failCount = 0;
+
 foreach ($toTest as $formname) {
     $form = fetch_form($formname);
-    echo parse($form);
+    if ($form) {
+        $tests = Spyc::YAMLLoadString($form);
+
+        foreach ($tests as $name => $suite) {
+            $input = !empty($suite['input']) ? $suite['input'] : '';
+            $expect = !empty($suite['expect']) ? $suite['expect'] : '';
+//            echo parse($input);
+
+            if ($input && $expect) {
+                if (!isset($grpCount[$formname])) {
+                    $grpCount[$formname] = array('test' => 0, 'pass' => 0, 'fail' => 0);
+                }
+
+                echo "<h4>$name</h4>";
+                $testCount++;
+                $grpCount[$formname]['test']++;
+                $result = parse($input);
+                $expected = trim(parse($expect));
+
+                if ($result === $expected) {
+                    $passCount++;
+                    $grpCount[$formname]['pass']++;
+                    echo graf('<span class="ui-icon ui-icon-check"></span> PASS', array('class' => 'success'));
+                } else {
+                    $failCount++;
+                    $grpCount[$formname]['fail']++;
+                    echo graf('<span class="ui-icon ui-icon-error"></span> FAIL', array('class' => 'error'));
+                    $diff = Diff::compare($expected, $result, true);
+                    echo Diff::toTable($diff, '', '');
+                }
+            }
+        }
+    } else {
+        echo '<h4 class="error">Form not found: '.$formname.'</h4>';
+    }
+
+    if (!empty($grpCount[$formname]['test'])) {
+        echo hed('Group results: '.$formname, 4);
+        echo graf(
+            '<span>Total: '.$grpCount[$formname]['test'].'</span>'.br.
+            (($grpCount[$formname]['pass'] > 0) ? '<span class="success">Passed: '.$grpCount[$formname]['pass'].'</span>'.br : '').
+            (($grpCount[$formname]['fail'] > 0) ? '<span class="error">Failed: '.$grpCount[$formname]['fail'].'</span>' : '')
+            , array('id' => 'unit-test-results')
+        );
+    }
+    echo '<hr>';
 }
+
+echo hed('Overall results', 4);
+echo graf(
+    '<span>Total: '.$testCount.'</span>'.br.
+    (($passCount > 0) ? '<span class="success">Passed: '.$passCount.'</span>'.br : '').
+    (($failCount > 0) ? '<span class="error">Failed: '.$failCount.'</span>' : '')
+    , array('id' => 'unit-test-results')
+);
     </txp:php>
 </body>
 </html>

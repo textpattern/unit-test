@@ -1,5 +1,15 @@
-<h2>5 images by cat</h2>
-<txp:images category="sky" limit="5" />
+---
+5 images by category:
+  input: |
+    <txp:images category="sky" limit="5" />
+  expect: |
 
-<h2>5 offset images by cat, sorted by name</h2>
-<txp:images category="sky" limit="5" offset="2" sort="name" />
+    <a href="<txp:site_url/>tests/?c=sky&amp;context=image&amp;p=6"><img src='<txp:site_url />images/6t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=10"><img src='<txp:site_url />images/10t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=2"><img src='<txp:site_url />images/2t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=3"><img src='<txp:site_url />images/3t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=1"><img src='<txp:site_url />images/1t.jpg' alt='' /></a>
+
+5 offset images by category, sorted by name:
+  input: |
+    <txp:images category="sky" limit="5" offset="2" sort="name" />
+  expect: |
+
+    <a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=2"><img src='<txp:site_url />images/2t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=3"><img src='<txp:site_url />images/3t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=1"><img src='<txp:site_url />images/1t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=5"><img src='<txp:site_url />images/5t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=7"><img src='<txp:site_url />images/7t.jpg' alt='' /></a>
+
