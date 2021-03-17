@@ -47,5 +47,13 @@ Site slogan wrapped in paras with class:
 
 Input and output can be as simple or complex as you wish, and can span multiple lines because the pipe symbol is used after the input/expect directives.
 
-Note that in YAML, **correct spacing (not tabs!) is vital**. There are two (2) spaces before each directive and four (4) spaces before the content. Failure to adhere to these conventions will mean a test will not be executed.
+Note that in YAML, **correct spacing (not tabs!) is vital**. There are two (2) spaces before each directive and four (4) spaces before the content. Failure to adhere to these conventions will mean a test will not be executed and likely show up as a 'warning' (depending on the severity of the malformed test).
 
+To aid with debugging and test creation, you may add a URL parameter `?show=` with any of these four values (comma-separate them if you use more than one):
+
+* `input`: To show the test input read from the YAML doc.
+* `expect`: To show the expected output of the test, as read from the YAML doc.
+* `output`: To show the actual HTML of the test after parsing.
+* `parsed`: To show the actual parsed output, rendered as Textpattern sees it.
+
+By supplying a test without expected output, the test will fail. But if you supply `?show=output` in the URL it will display what the output of the tag is, as HTML. When you’re satisfied it displays as intended, you can copy and paste that output into the `expect: |` rule so it can be used as expected output.
