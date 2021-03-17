@@ -58,6 +58,75 @@ To aid with debugging and test creation, you may add a URL parameter `?show=` wi
 
 By supplying a test without expected output, the test will fail. But if you supply `?show=output` in the URL it will display what the output of the tag is, as HTML. When you’re satisfied it displays as intended, you can copy and paste that output into the `expect: |` rule so it can be used as expected output.
 
+### On-the-fly environment changes
+
+You may alter any of the following items on-the-fly for all tests in a Form:
+
+* Prefs.
+* Language strings (provided the language is installed in the database).
+* Sections.
+
+Add an `env:` section to your test and then provide data that makes changes to the above items. The changes will remain in force from the test in which they are defined _until the end of the file_ (Form) or until they are subsequently altered. They will automatically be reset to the previous values when the next set of tests in the Form are executed.
+
+Here's an example of altering the language:
+
+~~~ yaml
+Language test - English:
+  input: |
+    <txp:text item="older" wraptag="span" class="string" />
+    <p><txp:text item="newer" /></p>
+  expect: |
+    <span class="string">Older</span>
+    <p>Newer</p>
+
+Language test - German:
+  input: |
+    <txp:text item="older" wraptag="span" class="string" />
+    <p><txp:text item="newer" /></p>
+  expect: |
+    <span class="string">Älter</span>
+    <p>Neuer</p>
+  env:
+    lang: de
+
+Second language test - fails, as German (Vorschau) is still in force:
+  input: |
+    <span><txp:text item="preview" /></span>
+  expect: |
+    <span>Preview</span>
+~~~
+
+Sections can be altered as follows:
+
+~~~ yaml
+Permlink test:
+  input: |
+    <txp:permlink id="1" />
+  expect: |
+    <txp:site_url />articles/welcome-to-your-site
+
+Permlink test - YMD:
+  input: |
+    <txp:permlink id="2" />
+  expect: |
+    <txp:site_url />articles/hope-for-the-future/meaningful-labor/a-second-exciting-article
+  env:
+    section:
+      articles:
+        permlink_mode: breadcrumb_title
+~~~
+
+Note that, while adding a new section is supported, its use is limited at present since most tags fetch their content from the database directly each time. Similarly, if you alter/add prefs:
+
+~~~ yaml
+  env:
+    prefs:
+      some_pref: its_value
+      permlink_format: 0
+~~~
+
+you may find that some tags don't use them, since they get their values from constants, or parts of their output are cached on first use and thus bypasses the pref on subsequent usage.
+
 ## How do I install this thing?
 
 There are two main routes. One is for adding the framework to your existing site and the other is for installing it with a fresh Textpattern installation.
