@@ -20,7 +20,7 @@
 <txp:variable name="unit_test"><txp:page_url type="name" /></txp:variable>
 <txp:variable name="unit_show"><txp:page_url type="show" /></txp:variable>
 <txp:php>
-global $variable;
+global $variable, $prefs, $textarray, $txp_sections;
 include_once txpath.'/vendors/mustangostang/Spyc/Spyc.php';
 include_once txpath.'/vendors/iamkate/diff/diff.php';
 
@@ -31,8 +31,14 @@ if (empty($variable['unit_test'])) {
 }
 
 $testCount = $passCount = $warnCount = $failCount = 0;
+$langObj = Txp::get('\Textpattern\L10n\Lang');
 
 foreach ($toTest as $formname) {
+    $stashed = array(
+        'prefs'    => $prefs,
+        'sections' => $txp_sections,
+    );
+
     $form = fetch_form($formname);
     if ($form) {
         $tests = Spyc::YAMLLoadString($form);
@@ -49,6 +55,34 @@ foreach ($toTest as $formname) {
 
             $input = !empty($suite['input']) ? $suite['input'] : '';
             $expect = !empty($suite['expect']) ? $suite['expect'] : '';
+            $env = !empty($suite['env']) ? $suite['env'] : '';
+
+            // Environment / pre-requisite processing.
+            if ($env) {
+                foreach ($env as $table => $opts) {
+                    switch ($table) {
+                        case 'prefs':
+                            foreach ($opts as $key => $val) {
+                                $prefs[$key] = $val;
+                            }
+                            break;
+                        case 'lang':
+                            $prefs['language'] = $opts;
+                            $textarray = $langObj->load($opts, 'common, public');
+                            break;
+                        case 'section':
+                            foreach ($opts as $key => $def) {
+                                if (isset($txp_sections[$key])) {
+                                    $def['name'] = $key;
+                                    $txp_sections[$key] = array_merge($txp_sections[$key], $def);
+                                } else {
+                                    $txp_sections[$key] = $def;
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
 
             echo "<h4>$name</h4>";
             $testCount++;
@@ -106,6 +140,11 @@ foreach ($toTest as $formname) {
         );
     }
     echo '<hr>';
+
+    // Restore globals for next test suite.
+    $prefs = $stashed['prefs'];
+    $txp_sections = $stashed['sections'];
+    $textarray = $textarray = $langObj->load($prefs['language'], 'common, public');
 }
 
 echo hed('Overall results', 4);
