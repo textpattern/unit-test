@@ -11,4 +11,3 @@
   expect: |
 
     <a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=2"><img src='<txp:site_url />images/2t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=3"><img src='<txp:site_url />images/3t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=1"><img src='<txp:site_url />images/1t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=5"><img src='<txp:site_url />images/5t.jpg' alt='' /></a><br /><a href="<txp:site_url />tests/?c=sky&amp;context=image&amp;p=7"><img src='<txp:site_url />images/7t.jpg' alt='' /></a>
-

@@ -5,21 +5,19 @@
     <meta charset="utf-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><txp:page_title /></title>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i&amp;subset=latin-ext">
-
     <txp:css format="link" media="" />
     <meta name="generator" content="Textpattern CMS">
-
     <meta name="robots" content="none">
-
     <txp:feed_link flavor="atom" format="link" label="Atom" />
     <txp:feed_link flavor="rss" format="link" label="RSS" />
 </head>
-<body class="testing-page" itemscope itemtype="https://schema.org/CollectionPage">
-<txp:variable name="unit_test"><txp:page_url type="name" /></txp:variable>
-<txp:variable name="unit_show"><txp:page_url type="show" /></txp:variable>
-<txp:php>
+<body class="testing-page">
+    <txp:variable name="unit_test"><txp:page_url type="name" /></txp:variable>
+    <txp:variable name="unit_show"><txp:page_url type="show" /></txp:variable>
+    <div class="wrapper">
+        <div class="container">
+            <txp:php>
 global $variable, $prefs, $textarray, $txp_sections;
 include_once txpath.'/vendors/mustangostang/Spyc/Spyc.php';
 include_once txpath.'/vendors/iamkate/diff/diff.php';
@@ -155,6 +153,8 @@ echo graf(
     (($failCount > 0) ? '<span class="error">Failed: '.$failCount.'</span>' : '')
     , array('id' => 'unit-test-results')
 );
-</txp:php>
+            </txp:php>
+        </div> <!-- /.container -->
+    </div> <!-- /.wrapper -->
 </body>
 </html>
