@@ -135,6 +135,7 @@ There are two main routes. One is for adding the framework to your existing site
 
 * Download the repo code and extract the zip.
 * Copy the entirety of textpattern/setup/themes/tag-test to your themes directory (usually /themes in the root of your site).
+* Import the `tag-test` theme from the Presentation>Themes panel.
 * Add a section (e.g. 'tests') and assign the tag-test assets: Page: `test-run` / Style: `default`.
 * Visit example.org/tests to run the tests in the suite.
 * Add your own tests as described above and submit them to us.
