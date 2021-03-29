@@ -1,0 +1,50 @@
+Assign variable:
+  input: |
+    <p>Assignment</p>
+    <txp:variable name="size_s" value="Small" />
+    <txp:variable name="size_m" value="Medium" />
+    <txp:variable name="size_l" value="Large" />
+    <txp:variable name="size_xl" value="Extra large" output />
+    <txp:variable name="size_none" value="" />
+    <txp:variable name="size_dflt" value="" default="None" />
+
+    <p>Reassign</p>
+    <txp:variable name="assign_s" value='<txp:variable name="size_s" />' default="Invalid" output />
+    <txp:variable name="assign_m" value='<txp:variable name="size_m" />' default="Invalid" />
+    <txp:variable name="assign_l" value='<txp:variable name="size_l" />' default="Invalid" />
+    <txp:variable name="assign_xl" value='<txp:variable name="size_xl" />' default="Invalid" />
+    <txp:variable name="assign_none" value='<txp:variable name="size_none" />' default="Invalid" />
+    <txp:variable name="assign_dflt" value='<txp:variable name="size_dflt" />' />
+
+    <p>Display</p>
+    <txp:variable name="assign_s" />
+    <txp:variable name="assign_m" />
+    <txp:variable name="assign_l" />
+    <txp:variable name="assign_xl" />
+    <txp:variable name="assign_none" />
+    <txp:variable name="assign_dflt" />
+
+  expect: |
+    <p>Assignment</p>
+
+
+
+    Extra large
+
+
+
+    <p>Reassign</p>
+    Small
+
+
+
+
+
+
+    <p>Display</p>
+    Small
+    Medium
+    Large
+    Extra large
+    Invalid
+    None

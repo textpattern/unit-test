@@ -1,0 +1,18 @@
+Section test:
+  input: |
+    <txp:section />
+    <txp:section title />
+    <txp:section title wraptag="h3" />
+  expect: |
+    tests
+    Tests
+    <h3>Tests</h3>
+
+Section list test:
+  input: |
+    <txp:section_list sections="tests, articles" />
+    <txp:section_list sections="tests, articles" wraptag="ul" break="li" />
+  expect: |
+    <a href="<txp:site_url />tests/">Tests</a><br /><a href="<txp:site_url />articles/">Articles</a>
+    <ul class="section_list"><li><a href="<txp:site_url />tests/">Tests</a></li>
+    <li><a href="<txp:site_url />articles/">Articles</a></li></ul>

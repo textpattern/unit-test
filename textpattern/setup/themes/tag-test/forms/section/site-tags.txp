@@ -9,5 +9,3 @@ Site slogan wrapped in paras with class:
     <txp:site_slogan wraptag="p" class="slogan" />
   expect: |
     <p class="slogan">Textpattern tag testing</p>
-
-
