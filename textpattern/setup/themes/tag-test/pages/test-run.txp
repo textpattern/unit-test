@@ -30,6 +30,8 @@ if (empty($variable['unit_test'])) {
 
 $testCount = $passCount = $warnCount = $failCount = 0;
 $langObj = Txp::get('\Textpattern\L10n\Lang');
+$currentver = get_pref('version');
+$semver = Txp::get('\Composer\Semver\Semver');
 
 foreach ($toTest as $formname) {
     $stashed = array(
@@ -38,6 +40,7 @@ foreach ($toTest as $formname) {
     );
 
     $form = fetch_form($formname);
+
     if ($form) {
         $tests = Spyc::YAMLLoadString($form);
 
@@ -51,9 +54,47 @@ foreach ($toTest as $formname) {
                 );
             }
 
-            $input = !empty($suite['input']) ? $suite['input'] : '';
-            $expect = !empty($suite['expect']) ? $suite['expect'] : '';
+            $inputBlock = !empty($suite['input']) ? $suite['input'] : '';
+            $expectBlock = !empty($suite['expect']) ? $suite['expect'] : '';
             $env = !empty($suite['env']) ? $suite['env'] : '';
+            $ver = !empty($suite['ver']) ? $suite['ver'] : '';
+
+            // Skip tests that aren't designated for this version of Txp.
+            if ($ver && !$semver->satisfies($currentver, $ver)) {
+                continue;
+            }
+
+            // Only extract relevant tests matching version in input.
+            if (is_array($inputBlock)) {
+                $inputBits = [];
+                foreach ($inputBlock as $version => $block) {
+                    if ($version === 'all' || $semver->satisfies($currentver, $version)) {
+                        $inputBits[] = $block;
+                    }
+
+                    if ($inputBits) {
+                        $input = implode("\n", $inputBits);
+                    }
+                }
+            } else {
+                $input = $inputBlock;
+            }
+
+            // Only prepare relevant expected output matching version.
+            if (is_array($expectBlock)) {
+                $expectBits = [];
+                foreach ($expectBlock as $version => $block) {
+                    if ($version === 'all' || $semver->satisfies($currentver, $version)) {
+                        $expectBits[] = $block;
+                    }
+
+                    if ($expectBits) {
+                        $expect = implode("\n", $expectBits);
+                    }
+                }
+            } else {
+                $expect = $expectBlock;
+            }
 
             // Environment / pre-requisite processing.
             if ($env) {
@@ -87,7 +128,7 @@ foreach ($toTest as $formname) {
             $grpCount[$formname]['test']++;
 
             if ($input) {
-                $result = parse($input);
+                $result = trim(parse($input));
                 $expected = ($expect) ? trim(parse($expect)) : '';
 
                 if (strpos($variable['unit_show'], 'input') !== false) {

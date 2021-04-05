@@ -15,6 +15,9 @@ Assign variable:
     <txp:variable name="assign_xl" value='<txp:variable name="size_xl" />' default="Invalid" />
     <txp:variable name="assign_none" value='<txp:variable name="size_none" />' default="Invalid" />
     <txp:variable name="assign_dflt" value='<txp:variable name="size_dflt" />' />
+    <txp:variable name="assign_trim" default="Invalid" trim>
+      <txp:variable name="size_xl" />
+    </txp:variable>
 
     <p>Display</p>
     <txp:variable name="assign_s" />
@@ -23,28 +26,35 @@ Assign variable:
     <txp:variable name="assign_xl" />
     <txp:variable name="assign_none" />
     <txp:variable name="assign_dflt" />
-
-  expect: |
-    <p>Assignment</p>
-
-
-
-    Extra large
+    <txp:variable name="assign_trim" />
+  expect:
+    all: |
+      <p>Assignment</p>
 
 
 
-    <p>Reassign</p>
-    Small
+      Extra large
+
+
+
+      <p>Reassign</p>
+      Small
 
 
 
 
 
 
-    <p>Display</p>
-    Small
-    Medium
-    Large
-    Extra large
-    Invalid
-    None
+
+      <p>Display</p>
+      Small
+      Medium
+      Large
+      Extra large
+      Invalid
+      None
+    <4.8.5: |
+      
+        Extra large
+    ^4.8.5: |
+      Extra large

@@ -1,0 +1,26 @@
+{
+  "name": "textpattern/unit-test",
+  "description": "A Unit Testing framework for Textpattern's tag language.",
+  "type": "project",
+  "author": "Team Textpattern",
+  "homepage": "https://textpattern.com",
+  "keywords": [
+    "textpattern",
+    "blogging",
+    "cms",
+    "testing",
+    "content management"
+  ],
+  "support": {
+    "issues": "https://github.com/textpattern/unit-test/issues",
+    "source": "https://github.com/textpattern/unit-test"
+  },
+  "config": {
+     "vendor-dir": "textpattern/vendors"
+  },
+  "require": {
+    "php": ">=5.6.0",
+    "composer/semver": "^2.0"
+  },
+  "license": "GPL-2.0-only"
+}
