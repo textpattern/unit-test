@@ -31,7 +31,12 @@ if (empty($variable['unit_test'])) {
 $testCount = $passCount = $warnCount = $failCount = 0;
 $langObj = Txp::get('\Textpattern\L10n\Lang');
 $currentver = get_pref('version');
-$semver = Txp::get('\Composer\Semver\Semver');
+
+if (class_exists('\Composer\Semver\Semver')) {
+    $semver = Txp::get('\Composer\Semver\Semver');
+} else {
+    $semver = false;
+}
 
 foreach ($toTest as $formname) {
     $stashed = array(
@@ -60,7 +65,7 @@ foreach ($toTest as $formname) {
             $ver = !empty($suite['ver']) ? $suite['ver'] : '';
 
             // Skip tests that aren't designated for this version of Txp.
-            if ($ver && !$semver->satisfies($currentver, $ver)) {
+            if ($ver && $semver && !$semver->satisfies($currentver, $ver)) {
                 continue;
             }
 
@@ -68,7 +73,7 @@ foreach ($toTest as $formname) {
             if (is_array($inputBlock)) {
                 $inputBits = [];
                 foreach ($inputBlock as $version => $block) {
-                    if ($version === 'all' || $semver->satisfies($currentver, $version)) {
+                    if ($version === 'all' || ($semver && $semver->satisfies($currentver, $version))) {
                         $inputBits[] = $block;
                     }
 
@@ -84,7 +89,7 @@ foreach ($toTest as $formname) {
             if (is_array($expectBlock)) {
                 $expectBits = [];
                 foreach ($expectBlock as $version => $block) {
-                    if ($version === 'all' || $semver->satisfies($currentver, $version)) {
+                    if ($version === 'all' || ($semver && $semver->satisfies($currentver, $version))) {
                         $expectBits[] = $block;
                     }
 

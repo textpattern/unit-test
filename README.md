@@ -198,3 +198,16 @@ There are two main routes. One is for adding the framework to your existing site
 * In a section of your choosing (either a new one or an existing one, depending on which theme you chose during installation) assign the tag-test theme’s `test-run` page and `default` stylesheet.
 * Visit example.org/tests to run the tests in the suite.
 * Add your own tests as described above and submit them to us.
+
+**Important: for version testing**
+
+If you are running a version of Textpattern lower than 4.9.0-dev, you will need to modify your textpattern/vendors/Textpattern/Loader.php file to add the line mentioned below to the `_construct()` function:
+
+~~~ php
+    public function __construct($directory, $namespace = null, $separator = '\\', $extension = '.php')
+    {
+        include_once txpath.'/vendors/autoload.php';
+        ...
+~~~
+
+That will then automatically load the version comparison library.
